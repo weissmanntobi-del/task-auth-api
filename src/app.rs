@@ -1,10 +1,10 @@
 use crate::{auth, health, state::AppState, tasks};
+use axum::http::StatusCode;
 use axum::{
     routing::{get, patch, post},
     Router,
 };
 use std::time::Duration;
-use axum::http::StatusCode;
 use tower_http::{
     request_id::{MakeRequestUuid, PropagateRequestIdLayer, SetRequestIdLayer},
     timeout::TimeoutLayer,
