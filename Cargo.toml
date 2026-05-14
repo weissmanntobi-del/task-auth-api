@@ -1,0 +1,38 @@
+[package]
+name = "task-auth-api"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.78"
+description = "Production-oriented Axum + SQLx + Postgres + JWT task API companion repo for Rust Mini Projects"
+license = "MIT"
+authors = ["Tobias Weissmann"]
+
+[dependencies]
+anyhow = "1"
+argon2 = "0.5"
+axum = "0.8"
+chrono = { version = "0.4", features = ["serde"] }
+config = "0.15"
+jsonwebtoken = "9"
+rand_core = { version = "0.6", features = ["getrandom"] }
+secrecy = { version = "0.10", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "macros", "migrate", "chrono", "uuid"] }
+thiserror = "2"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal"] }
+tower-http = { version = "0.6", features = ["trace", "request-id", "timeout", "cors"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+uuid = { version = "1", features = ["serde", "v4"] }
+validator = { version = "0.20", features = ["derive"] }
+
+[dev-dependencies]
+http-body-util = "0.1"
+tower = { version = "0.5", features = ["util"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true

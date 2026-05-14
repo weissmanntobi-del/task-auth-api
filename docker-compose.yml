@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: task_api
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d task_api"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    environment:
+      APP__SERVER__HOST: 0.0.0.0
+      APP__SERVER__PORT: 3000
+      APP__DATABASE__URL: postgres://app:app@db:5432/task_api
+      APP__DATABASE__MAX_CONNECTIONS: 10
+      APP__DATABASE__CONNECT_TIMEOUT_SECS: 5
+      APP__TRACING__FILTER: info,task_auth_api=debug
+      APP__AUTH__JWT_SECRET: change-me-use-a-long-random-secret
+      APP__AUTH__ACCESS_TOKEN_TTL_SECS: 900
+      APP__AUTH__REFRESH_TOKEN_TTL_DAYS: 30
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
